@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -9,6 +9,8 @@ import {
 import path from 'path';
 import configMapping from './common/configuration/config-mapping';
 import { envSchema } from './common/configuration/env-schema-validation';
+import { MongooseModule } from '@nestjs/mongoose';
+import { EnvironmentInterface } from './common/configuration/configuration.interface';
 
 @Module({
   imports: [
@@ -29,6 +31,12 @@ import { envSchema } from './common/configuration/env-schema-validation';
         AcceptLanguageResolver,
         new HeaderResolver(['x-lang']),
       ],
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: (configService: ConfigService<EnvironmentInterface>) => ({
+        uri: configService.getOrThrow('mongodbUri'),
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [],

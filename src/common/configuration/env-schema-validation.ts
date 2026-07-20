@@ -4,4 +4,5 @@ export const envSchema = joi.object({
   PORT: Joi.number().integer().default(3000),
   NODE_ENV: Joi.string().required(),
   FULLBACK_LANGUAGE: Joi.string().required().default('ar'),
+  MONGODB_URI: Joi.string().required(),
 });
