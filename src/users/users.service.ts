@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { Model } from 'mongoose';
+import { Model, QueryFilter } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 @Injectable()
@@ -31,5 +31,8 @@ export class UsersService {
       password: hashedPassword,
     });
     return user;
+  }
+  async findOne(query: QueryFilter<User>) {
+    return this.userModel.findOne(query);
   }
 }
