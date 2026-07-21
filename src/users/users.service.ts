@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from './schemas/user.schema';
-import { CreateUserDto } from './dto/create-user.dto';
-import { badRequestException } from 'src/common/errors-handling/custom-exceptions/bad-request.exception';
 import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './schemas/user.schema';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
@@ -15,14 +14,14 @@ export class UsersService {
       email: body.email,
     });
     if (existingUserByEmail) {
-      throw new badRequestException('Email already exists');
+      throw new BadRequestException('Email already exists');
     }
     //check phoneNumber duplication
     const existingUserPhoneNumber = await this.userModel.findOne({
-      email: body.email,
+      phoneNumber: body.phoneNumber,
     });
     if (existingUserPhoneNumber) {
-      throw new badRequestException('Email already exists');
+      throw new BadRequestException('phoneNumber already exists');
     }
     //hash password
     const hashedPassword = await bcrypt.hash(body.password, 10);
