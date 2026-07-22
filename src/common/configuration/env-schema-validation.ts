@@ -6,5 +6,6 @@ export const envSchema = joi.object({
   FULLBACK_LANGUAGE: Joi.string().required().default('ar'),
   MONGODB_URI: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
-  ACCESS_TOKEN_EXPIRE_IN: Joi.string().required(),
+  ACCESS_TOKEN_EXPIRE_IN: Joi.string().required().default(7),
+  REFRESH_TOKEN_EXPIRE_IN: Joi.string().required().default(15),
 });

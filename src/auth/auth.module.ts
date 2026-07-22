@@ -6,9 +6,20 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { EnvironmentInterface } from 'src/common/configuration/configuration.interface';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  RefreshToken,
+  RefreshTokenSchema,
+} from './schemas/refresh-token.schema';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([
+      {
+        name: RefreshToken.name,
+        schema: RefreshTokenSchema,
+      },
+    ]),
     UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
