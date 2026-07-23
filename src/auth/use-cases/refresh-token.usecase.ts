@@ -10,6 +10,8 @@ import { Model } from 'mongoose';
 import { RefreashTokenDto } from '../dto/RefreshTokenDto.dto';
 import { RefreshToken } from '../schemas/refresh-token.schema';
 import { GenerateTokenUseCase } from './generate-token.usecase';
+import { AuthResponseDto } from '../dto/auth-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class RefreshTokenUseCase {
@@ -20,7 +22,7 @@ export class RefreshTokenUseCase {
     private readonly generateTokenUseCase: GenerateTokenUseCase,
   ) {}
 
-  async execute(body: RefreashTokenDto) {
+  async execute(body: RefreashTokenDto): Promise<AuthResponseDto> {
     type RefreshTokenPayload = {
       userId: string;
       type: 'access' | 'refresh';
@@ -67,6 +69,12 @@ export class RefreshTokenUseCase {
       throw new UnauthorizedException('Invalid refresh token');
     }
     //generate & return token
-    return await this.generateTokenUseCase.execute(refreshTokenDoc.userId);
+    const { accessToken, refreshToken } =
+      await this.generateTokenUseCase.execute(refreshTokenDoc.userId);
+
+    return plainToInstance(AuthResponseDto, {
+      accessToken,
+      refreshToken,
+    });
   }
 }

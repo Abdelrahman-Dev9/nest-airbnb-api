@@ -4,12 +4,14 @@ import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { User } from '../schemas/user.schema';
+import { UserResponseDto } from '../dto/user-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class CreateUserUseCase {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async create(body: CreateUserDto) {
+  async execute(body: CreateUserDto): Promise<UserResponseDto> {
     //check email duplication
     const existingUserByEmail = await this.userModel.findOne({
       email: body.email,
@@ -31,6 +33,6 @@ export class CreateUserUseCase {
       ...body,
       password: hashedPassword,
     });
-    return user;
+    return plainToInstance(UserResponseDto, user.toObject());
   }
 }

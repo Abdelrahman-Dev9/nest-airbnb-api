@@ -6,6 +6,8 @@ import * as bcrpty from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { RefreshToken } from '../schemas/refresh-token.schema';
 import { Model } from 'mongoose';
+import { AuthResponseDto } from '../dto/auth-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class GenerateTokenUseCase {
@@ -15,7 +17,7 @@ export class GenerateTokenUseCase {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService<EnvironmentInterface>,
   ) {}
-  async execute(userId: string) {
+  async execute(userId: string): Promise<AuthResponseDto> {
     const accessToken = await this.jwtService.signAsync({ userId });
     const refreshToken = await this.jwtService.signAsync(
       { userId, type: 'refresh' },
@@ -33,6 +35,9 @@ export class GenerateTokenUseCase {
       { refreshToken: hashedRefreshToken },
       { returnDocument: 'after', upsert: true },
     );
-    return { accessToken: accessToken, refreshToken: refreshToken };
+    return plainToInstance(AuthResponseDto, {
+      accessToken,
+      refreshToken,
+    });
   }
 }

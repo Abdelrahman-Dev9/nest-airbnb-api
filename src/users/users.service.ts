@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { CreateUserUseCase } from './use-cases/create-user.usecase';
 import { FindUserUseCase } from './use-cases/find-user.usecase';
+import { UserResponseDto } from './dto/user-response.dto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -11,8 +12,8 @@ export class UsersService {
     private readonly findUserUseCase: FindUserUseCase,
   ) {}
 
-  async create(body: CreateUserDto) {
-    return this.createUserUseCase.create(body);
+  async create(body: CreateUserDto): Promise<UserResponseDto> {
+    return this.createUserUseCase.execute(body);
   }
   async findOne(query: QueryFilter<User>) {
     return this.findUserUseCase.execute(query);
