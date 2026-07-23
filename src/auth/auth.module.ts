@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
@@ -11,6 +10,10 @@ import {
   RefreshToken,
   RefreshTokenSchema,
 } from './schemas/refresh-token.schema';
+import { GenerateTokenUseCase } from './use-cases/generate-token.usecase';
+import { LoginUseCase } from './use-cases/login.usecase';
+import { RegisterUseCase } from './use-cases/register.usecase';
+import { RefreshTokenUseCase } from './use-cases/refresh-token.usecase';
 
 @Module({
   imports: [
@@ -33,6 +36,12 @@ import {
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    RegisterUseCase,
+    GenerateTokenUseCase,
+    LoginUseCase,
+    RefreshTokenUseCase,
+  ],
 })
 export class AuthModule {}
