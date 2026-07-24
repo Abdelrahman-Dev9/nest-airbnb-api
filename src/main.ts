@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 import { AppModule } from './app.module';
 import { EnvironmentInterface } from './common/configuration/configuration.interface';
+import { SwaggerConfig } from './common/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  //setup swagger
+
+  SwaggerConfig.setup(app);
 
   // To translate the class-validator errors
   app.useGlobalFilters(
