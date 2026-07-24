@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { ConsoleLogger, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
@@ -7,7 +7,11 @@ import { EnvironmentInterface } from './common/configuration/configuration.inter
 import { SwaggerConfig } from './common/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new ConsoleLogger({
+      json: process.env.NODE_ENV === 'production',
+    }),
+  });
 
   // app.useGlobalFilters(new CustomExceptionFilter());
   // To use nestjs-i18n in your DTO validation.json
