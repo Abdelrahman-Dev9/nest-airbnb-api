@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import * as bcrpty from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from '../dto/Login.dto';
@@ -8,12 +8,14 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class LoginUseCase {
+  private readonly looger = new Logger(LoginUseCase.name);
   constructor(
     private readonly usersService: UsersService,
     private readonly generateTokenUseCase: GenerateTokenUseCase,
   ) {}
 
   async execute(body: LoginDto): Promise<AuthResponseDto> {
+    this.looger.log('login request for email: ', body.email);
     //find user by email
     const user = await this.usersService.findOne({ email: body.email });
     if (!user) {

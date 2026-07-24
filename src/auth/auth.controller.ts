@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/Login.dto';
@@ -12,6 +12,7 @@ import { API_TAGES } from 'src/common/swagger';
 @ApiTags(API_TAGES.AUTH)
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @RegisterSwagger()
@@ -22,6 +23,7 @@ export class AuthController {
   @LoginSwagger()
   @Post('login')
   login(@Body() body: LoginDto) {
+    this.logger.log('login operation');
     return this.authService.login(body);
   }
 
