@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import * as bcrpty from 'bcrypt';
+import { plainToInstance } from 'class-transformer';
+import { badRequestException } from 'src/common/errors-handling/custom-exceptions/bad-request.exception';
 import { UsersService } from 'src/users/users.service';
+import { AuthResponseDto } from '../dto/auth-response.dto';
 import { LoginDto } from '../dto/Login.dto';
 import { GenerateTokenUseCase } from './generate-token.usecase';
-import { AuthResponseDto } from '../dto/auth-response.dto';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class LoginUseCase {
@@ -19,7 +20,7 @@ export class LoginUseCase {
     //find user by email
     const user = await this.usersService.findOne({ email: body.email });
     if (!user) {
-      throw new BadRequestException('Invalid credentials');
+      throw new badRequestException('Invalid credentials');
     }
     //compare password
     const isPasswordMatch = await bcrpty.compare(body.password, user.password);
