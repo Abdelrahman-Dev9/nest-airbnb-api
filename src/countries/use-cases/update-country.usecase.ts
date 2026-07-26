@@ -1,23 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Country } from './../schema/country.schema';
-import { UpdateCountryDto } from '../dtos/update-country.dto';
-import { CountryResponseDto } from '../dtos/country-response.dto';
-import { badRequestException } from 'src/common/errors-handling/custom-exceptions/bad-request.exception';
 import { plainToInstance } from 'class-transformer';
+import { badRequestException } from 'src/common/errors-handling/custom-exceptions/bad-request.exception';
+import { CountryResponseDto } from '../dtos/country-response.dto';
+import { UpdateCountryDto } from '../dtos/update-country.dto';
+import { CountryRepository } from '../repository/country.repositry';
 
 @Injectable()
 export class UpdateCountryUseCase {
-  constructor(
-    @InjectModel(Country.name)
-    private readonly countryModel: Model<Country>,
-  ) {}
+  constructor(private readonly countryRepository: CountryRepository) {}
   async execute(
     counterId: string,
     body: UpdateCountryDto,
   ): Promise<CountryResponseDto> {
-    const country = await this.countryModel.findOne({
+    const country = await this.countryRepository.findOne({
       _id: counterId,
       isdeleted: { $ne: true },
     });
@@ -26,7 +21,7 @@ export class UpdateCountryUseCase {
     }
 
     if (body.name) {
-      const existCountry = await this.countryModel.findOne({
+      const existCountry = await this.countryRepository.findOne({
         name: body.name,
         isdeleted: { $ne: true },
         _id: { $ne: counterId },
@@ -36,7 +31,7 @@ export class UpdateCountryUseCase {
       }
     }
 
-    const updatedCountry = await this.countryModel.findByIdAndUpdate(
+    const updatedCountry = await this.countryRepository.findByIdAndUpdate(
       counterId,
       body,
       {

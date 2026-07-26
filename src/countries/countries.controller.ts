@@ -10,12 +10,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { PaginatedResult } from 'src/common/data-access';
 import { CountriesService } from './countries.service';
 import { CountryByIdDto } from './dtos/country-by-id.dto';
 import { CountryResponseDto } from './dtos/country-response.dto';
 import { CreateCountryDto } from './dtos/create-country.dto';
-import { UpdateCountryDto } from './dtos/update-country.dto';
 import { FindAllDto } from './dtos/find-all.dto';
+import { UpdateCountryDto } from './dtos/update-country.dto';
 
 @Controller('countries')
 export class CountriesController {
@@ -30,7 +31,9 @@ export class CountriesController {
     return this.countriesService.findCountryById(param.id);
   }
   @Get()
-  FindAll(@Query() query: FindAllDto): Promise<CountryResponseDto[]> {
+  FindAll(
+    @Query() query: FindAllDto,
+  ): Promise<PaginatedResult<CountryResponseDto>> {
     return this.countriesService.findAllCountries(query);
   }
 

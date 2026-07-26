@@ -4,12 +4,17 @@ export class FindAllDto {
   @IsOptional()
   @IsString()
   name: string;
+
   @IsOptional()
   @IsString()
   countryCode: string;
 
   @IsOptional()
   page?: number;
+
   @IsOptional()
   limit?: number;
+
+  @IsOptional()
+  ignoreLimit?: boolean;
 }

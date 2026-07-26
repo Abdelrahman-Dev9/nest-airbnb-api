@@ -1,25 +1,24 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import { EnvironmentInterface } from 'src/common/configuration/configuration.interface';
+import { ModelName } from 'src/common/data-access';
+import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from 'src/users/users.module';
-import { EnvironmentInterface } from 'src/common/configuration/configuration.interface';
-import { MongooseModule } from '@nestjs/mongoose';
-import {
-  RefreshToken,
-  RefreshTokenSchema,
-} from './schemas/refresh-token.schema';
+import { RefreshTokenSchema } from './schemas/refresh-token.schema';
 import { GenerateTokenUseCase } from './use-cases/generate-token.usecase';
 import { LoginUseCase } from './use-cases/login.usecase';
-import { RegisterUseCase } from './use-cases/register.usecase';
 import { RefreshTokenUseCase } from './use-cases/refresh-token.usecase';
+import { RegisterUseCase } from './use-cases/register.usecase';
+import { RefreshTokenRepository } from './repository/refresh-token.repository';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: RefreshToken.name,
+        name: ModelName.REFRESHTOKEN,
         schema: RefreshTokenSchema,
       },
     ]),
@@ -42,6 +41,7 @@ import { RefreshTokenUseCase } from './use-cases/refresh-token.usecase';
     GenerateTokenUseCase,
     LoginUseCase,
     RefreshTokenUseCase,
+    RefreshTokenRepository,
   ],
 })
 export class AuthModule {}
