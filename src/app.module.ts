@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { CoreModule } from './core.module';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
+import { CitiesModule } from './cities/cities.module';
 import { CustomExceptionFilter } from './common/errors-handling/filters/custom-exception.filter';
 import { LoggerInterceptor } from './common/interceptors';
+import { CoreModule } from './core.module';
 import { CountriesModule } from './countries/countries.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [CoreModule, UsersModule, AuthModule, CountriesModule],
+  imports: [CoreModule, UsersModule, AuthModule, CountriesModule, CitiesModule],
   controllers: [],
   providers: [
     { provide: APP_FILTER, useClass: CustomExceptionFilter },

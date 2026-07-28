@@ -27,5 +27,6 @@ import { UpdateCountryUseCase } from './use-cases/update-country.usecase';
     UpdateCountryUseCase,
     CountryRepository,
   ],
+  exports: [CountriesService],
 })
 export class CountriesModule {}
