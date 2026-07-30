@@ -3,6 +3,7 @@ export enum ModelName {
   CITIES = 'cities',
   CURRENCIES = 'currencies',
   UNITECATEGORIES = 'unit-categories',
+  APP_SETTINGS = 'app-settings',
   USERS = 'users',
   REFRESHTOKEN = 'refresh-tokens',
 }
