@@ -1,26 +1,24 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { Model } from 'mongoose';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { User } from '../schemas/user.schema';
-import { UserResponseDto } from '../dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UserResponseDto } from '../dto/user-response.dto';
+import { UserRepository } from './../repository/user.repository';
 
 @Injectable()
 export class CreateUserUseCase {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async execute(body: CreateUserDto): Promise<UserResponseDto> {
     //check email duplication
-    const existingUserByEmail = await this.userModel.findOne({
+    const existingUserByEmail = await this.userRepository.findOne({
       email: body.email,
     });
     if (existingUserByEmail) {
       throw new BadRequestException('Email already exists');
     }
     //check phoneNumber duplication
-    const existingUserPhoneNumber = await this.userModel.findOne({
+    const existingUserPhoneNumber = await this.userRepository.findOne({
       phoneNumber: body.phoneNumber,
     });
     if (existingUserPhoneNumber) {
@@ -29,7 +27,7 @@ export class CreateUserUseCase {
     //hash password
     const hashedPassword = await bcrypt.hash(body.password, 10);
     //create user
-    const user = await this.userModel.create({
+    const user = await this.userRepository.create({
       ...body,
       password: hashedPassword,
     });

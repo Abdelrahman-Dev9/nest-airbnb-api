@@ -4,20 +4,17 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/mongoose';
 import * as bcrpty from 'bcrypt';
-import { Model } from 'mongoose';
-import { RefreashTokenDto } from '../dto/RefreshTokenDto.dto';
-import { RefreshToken } from '../schemas/refresh-token.schema';
-import { GenerateTokenUseCase } from './generate-token.usecase';
-import { AuthResponseDto } from '../dto/auth-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { AuthResponseDto } from '../dto/auth-response.dto';
+import { RefreashTokenDto } from '../dto/RefreshTokenDto.dto';
+import { RefreshTokenRepository } from './../repository/refresh-token.repository';
+import { GenerateTokenUseCase } from './generate-token.usecase';
 
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(
-    @InjectModel(RefreshToken.name)
-    private readonly refreshTokenModel: Model<RefreshToken>,
+    private readonly refreshTokenRepository: RefreshTokenRepository,
     private readonly jwtService: JwtService,
     private readonly generateTokenUseCase: GenerateTokenUseCase,
   ) {}
@@ -48,7 +45,7 @@ export class RefreshTokenUseCase {
     // const hashedRefreshToken = await bcrpty.hash(body.RefreshToken, 10);
 
     //find refresh token
-    const refreshTokenDoc = await this.refreshTokenModel.findOne({
+    const refreshTokenDoc = await this.refreshTokenRepository.findOne({
       userId: decodedToken.userId,
     });
 

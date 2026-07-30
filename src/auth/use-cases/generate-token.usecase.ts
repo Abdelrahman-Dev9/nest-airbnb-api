@@ -1,19 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { EnvironmentInterface } from 'src/common/configuration/configuration.interface';
 import * as bcrpty from 'bcrypt';
-import { InjectModel } from '@nestjs/mongoose';
-import { RefreshToken } from '../schemas/refresh-token.schema';
-import { Model } from 'mongoose';
-import { AuthResponseDto } from '../dto/auth-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { EnvironmentInterface } from 'src/common/configuration/configuration.interface';
+import { AuthResponseDto } from '../dto/auth-response.dto';
+import { RefreshTokenRepository } from './../repository/refresh-token.repository';
 
 @Injectable()
 export class GenerateTokenUseCase {
   constructor(
-    @InjectModel(RefreshToken.name)
-    private readonly refreshTokenModel: Model<RefreshToken>,
+    private readonly refreshTokenRepository: RefreshTokenRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService<EnvironmentInterface>,
   ) {}
@@ -30,7 +27,7 @@ export class GenerateTokenUseCase {
 
     const hashedRefreshToken = await bcrpty.hash(refreshToken, 10);
 
-    await this.refreshTokenModel.findOneAndUpdate(
+    await this.refreshTokenRepository.findOneAndUpdate(
       { userId },
       { refreshToken: hashedRefreshToken },
       { returnDocument: 'after', upsert: true },
