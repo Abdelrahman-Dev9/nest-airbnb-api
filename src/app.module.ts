@@ -8,9 +8,10 @@ import { CoreModule } from './core.module';
 import { CountriesModule } from './countries/countries.module';
 import { UsersModule } from './users/users.module';
 import { CurrenciesModule } from './currencies/currencies.module';
+import { UnitCategoriesModule } from './unit-categories/unit-categories.module';
 
 @Module({
-  imports: [CoreModule, UsersModule, AuthModule, CountriesModule, CitiesModule, CurrenciesModule],
+  imports: [CoreModule, UsersModule, AuthModule, CountriesModule, CitiesModule, CurrenciesModule, UnitCategoriesModule],
   controllers: [],
   providers: [
     { provide: APP_FILTER, useClass: CustomExceptionFilter },
