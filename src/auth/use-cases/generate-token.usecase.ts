@@ -6,6 +6,7 @@ import { plainToInstance } from 'class-transformer';
 import { EnvironmentInterface } from 'src/common/configuration/configuration.interface';
 import { AuthResponseDto } from '../dto/auth-response.dto';
 import { RefreshTokenRepository } from './../repository/refresh-token.repository';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class GenerateTokenUseCase {
@@ -14,10 +15,10 @@ export class GenerateTokenUseCase {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService<EnvironmentInterface>,
   ) {}
-  async execute(userId: string): Promise<AuthResponseDto> {
-    const accessToken = await this.jwtService.signAsync({ userId });
+  async execute(payload: JwtPayload): Promise<AuthResponseDto> {
+    const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(
-      { userId, type: 'refresh' },
+      { payload, type: 'refresh' },
       {
         expiresIn: this.configService.getOrThrow('refreshTokenExpireIn'),
       },
@@ -28,7 +29,7 @@ export class GenerateTokenUseCase {
     const hashedRefreshToken = await bcrpty.hash(refreshToken, 10);
 
     await this.refreshTokenRepository.findOneAndUpdate(
-      { userId },
+      { userId: payload.id },
       { refreshToken: hashedRefreshToken },
       { returnDocument: 'after', upsert: true },
     );
