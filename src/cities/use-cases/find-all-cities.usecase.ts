@@ -20,13 +20,13 @@ export class FindAllCitiesUsecase {
     };
 
     if (query?.name) matchQuery.name = { $regex: query.name, $options: 'i' };
-    if (query?.country) matchQuery.country = query.country;
+    if (query?.cityCode) matchQuery.city = query.cityCode;
 
     const result = await this.cityRepository.findPaginated(matchQuery, {
       page: query?.page,
       limit: query?.limit,
       ignoreLimit: query?.ignoreLimit,
-      populate: [{ path: 'country', select: 'name' }],
+      populate: [{ path: 'city', select: 'name' }],
       lean: true,
     });
 

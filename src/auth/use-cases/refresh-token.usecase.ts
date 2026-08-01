@@ -10,6 +10,7 @@ import { AuthResponseDto } from '../dto/auth-response.dto';
 import { RefreashTokenDto } from '../dto/RefreshTokenDto.dto';
 import { RefreshTokenRepository } from './../repository/refresh-token.repository';
 import { GenerateTokenUseCase } from './generate-token.usecase';
+import { Roles } from 'src/common/constant';
 
 @Injectable()
 export class RefreshTokenUseCase {
@@ -21,7 +22,10 @@ export class RefreshTokenUseCase {
 
   async execute(body: RefreashTokenDto): Promise<AuthResponseDto> {
     type RefreshTokenPayload = {
-      userId: string;
+      payload: {
+        id: string;
+        role: string;
+      };
       type: 'access' | 'refresh';
     };
     let decodedToken: RefreshTokenPayload;
@@ -46,7 +50,7 @@ export class RefreshTokenUseCase {
 
     //find refresh token
     const refreshTokenDoc = await this.refreshTokenRepository.findOne({
-      userId: decodedToken.userId,
+      userId: decodedToken.payload.id,
     });
 
     console.log('refreshTokenDoc', refreshTokenDoc);
@@ -67,7 +71,10 @@ export class RefreshTokenUseCase {
     }
     //generate & return token
     const { accessToken, refreshToken } =
-      await this.generateTokenUseCase.execute(refreshTokenDoc.userId);
+      await this.generateTokenUseCase.execute({
+        id: decodedToken.payload.id,
+        role: decodedToken.payload.role as Roles,
+      });
 
     return plainToInstance(AuthResponseDto, {
       accessToken,

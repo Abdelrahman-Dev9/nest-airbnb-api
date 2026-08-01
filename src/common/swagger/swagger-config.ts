@@ -10,6 +10,7 @@ export class SwaggerConfig {
       .setVersion('1.0')
       .addTag(API_TAGES.AUTH)
       .addTag(API_TAGES.USERS)
+      .addTag(API_TAGES.COUNTRIES)
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, documentFactory, {

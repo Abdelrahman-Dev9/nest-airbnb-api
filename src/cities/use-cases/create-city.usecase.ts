@@ -16,7 +16,7 @@ export class CreateCityUseCase {
   async execute(body: CreateCityDto): Promise<CityResponseDto> {
     const existingCity = await this.cityRepository.findOne({
       name: body.name,
-      country: body.country,
+      country: body.cityCode,
       isDeleted: { $ne: true },
     });
 
