@@ -17,7 +17,7 @@ import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorators';
 
-type RequestWithUser = Request & {
+export type RequestWithUser = Request & {
   user: IPrincipal;
 };
 @Injectable()
