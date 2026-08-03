@@ -20,6 +20,8 @@ import { FindUniteCategorySwagger } from './swagger/find-unit-category-id.swagge
 import { SoftDeleteUniteCategoryByIdSwagger } from './swagger/soft-delete-unit-category.swagger';
 import { UpdateUniteCategorySwagger } from './swagger/update-unit-category.swagger';
 import { UnitCategoriesService } from './unit-categories.service';
+import { Authorize } from 'src/auth/decorators/roles.decorator';
+import { Roles } from 'src/common/constant';
 
 @Controller('unit-categories')
 export class UnitCategoriesController {
@@ -27,6 +29,7 @@ export class UnitCategoriesController {
 
   @CreateUniteCategorySwagger()
   @Post()
+  @Authorize(Roles.SYSTEM_ADMIN)
   async createUnitCategory(
     @Body() body: CreateUniteCategoryDto,
   ): Promise<UnitCategoryResponseDto> {
@@ -51,6 +54,7 @@ export class UnitCategoriesController {
 
   @UpdateUniteCategorySwagger()
   @Patch(':id')
+  @Authorize(Roles.SYSTEM_ADMIN)
   async updateUnitCategoryById(
     @Param() param: FindUnitCategoryById,
     @Body() body: UpdateUniteCategoryDto,
@@ -60,6 +64,7 @@ export class UnitCategoriesController {
 
   @SoftDeleteUniteCategoryByIdSwagger()
   @Delete(':id')
+  @Authorize(Roles.SYSTEM_ADMIN)
   async softDeleteUnitCategoryById(
     @Param() param: FindUnitCategoryById,
   ): Promise<void> {

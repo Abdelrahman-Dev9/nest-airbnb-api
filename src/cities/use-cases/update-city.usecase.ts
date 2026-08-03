@@ -20,7 +20,7 @@ export class UpdateCityUsecase {
     // check name duplication per-country
     const existingCityByName = await this.cityRepository.findOne({
       name: body.name,
-      country: city.country,
+      country: city.cityCode,
       isDeleted: false,
       _id: { $ne: cityId },
     });

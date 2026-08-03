@@ -20,6 +20,8 @@ import { FindAllCurrenciesSwagger } from './swagger/find-all-currencies.swagger'
 import { FindCurrencyById } from './swagger/find-currency-by-id.swagger';
 import { SoftDeleteCurrencyByIdSwagger } from './swagger/soft-delete-currency-by-id.swagger';
 import { UpdateCurrenyByIdSwagger } from './swagger/update-currency-by-id.swagger';
+import { Authorize } from 'src/auth/decorators/roles.decorator';
+import { Roles } from 'src/common/constant';
 
 @Controller('currencies')
 export class CurrenciesController {
@@ -27,6 +29,7 @@ export class CurrenciesController {
 
   @CreateCurrencySwagger()
   @Post()
+  @Authorize(Roles.SYSTEM_ADMIN)
   createCurrency(
     @Body() body: CreateCurrencyDto,
   ): Promise<CurrencyResponseDto> {
@@ -51,6 +54,7 @@ export class CurrenciesController {
 
   @UpdateCurrenyByIdSwagger()
   @Patch(':id')
+  @Authorize(Roles.SYSTEM_ADMIN)
   updateCurrency(
     @Param() param: FindCurrencyByIdDto,
     @Body() body: updateCurrencyDto,
@@ -60,6 +64,7 @@ export class CurrenciesController {
 
   @SoftDeleteCurrencyByIdSwagger()
   @Delete(':id')
+  @Authorize(Roles.SYSTEM_ADMIN)
   softDeleteCurrency(@Param() param: FindCurrencyByIdDto): Promise<void> {
     return this.currenciesService.deleteCurrency(param.id);
   }
