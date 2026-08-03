@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -8,9 +9,8 @@ import {
 } from 'nestjs-i18n';
 import path from 'path';
 import configMapping from './common/configuration/config-mapping';
-import { envSchema } from './common/configuration/env-schema-validation';
-import { MongooseModule } from '@nestjs/mongoose';
 import { EnvironmentInterface } from './common/configuration/configuration.interface';
+import { envSchema } from './common/configuration/env-schema-validation';
 
 @Module({
   imports: [

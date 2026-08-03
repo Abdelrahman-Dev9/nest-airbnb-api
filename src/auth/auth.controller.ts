@@ -9,6 +9,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginSwagger } from './swagger/login.swagger';
 import { RefreshTokenSwagger } from './swagger/refresh-token.swagger';
 import { RegisterSwagger } from './swagger/register.swagger';
+import { Public } from './decorators/public.decorators';
 
 @ApiTags(API_TAGES.AUTH)
 @Controller('auth')
@@ -23,6 +24,7 @@ export class AuthController {
   }
   @LoginSwagger()
   @Post('login')
+  @Public()
   login(@Body() body: LoginDto): Promise<AuthResponseDto> {
     this.logger.log('login operation');
     return this.authService.login(body);
