@@ -6,8 +6,8 @@ export class City {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, ref: ModelName.COUNTRIES })
-  country: string;
+  @Prop({ required: true, ref: ModelName.CITIES })
+  cityCode: string;
 
   @Prop({ default: false })
   isDeleted: boolean;

@@ -11,7 +11,6 @@ export class UserResponseDto {
   @Expose()
   phoneNumber: string;
 
-  @Exclude()
   password: string;
 
   @Exclude()

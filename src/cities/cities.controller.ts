@@ -23,6 +23,8 @@ import { FindAllCitiesSwagger } from './swagger/find-all-cities.swagger';
 import { FindCityByIdSwagger } from './swagger/find-city-by-id.swagger';
 import { SoftDeleteCityByIdSwagger } from './swagger/soft-delete-city.swagger';
 import { UpdateCitySwagger } from './swagger/update-city.swagger';
+import { Authorize } from 'src/auth/decorators/roles.decorator';
+import { Roles } from 'src/common/constant';
 
 @ApiTags(API_TAGES.CITIES)
 @Controller('cities')
@@ -31,6 +33,7 @@ export class CitiesController {
 
   @CreateCitySwagger()
   @Post()
+  @Authorize(Roles.SYSTEM_ADMIN, Roles.USER)
   async createCity(@Body() body: CreateCityDto): Promise<CityResponseDto> {
     return this.citiesService.createCity(body);
   }
@@ -61,6 +64,7 @@ export class CitiesController {
   @SoftDeleteCityByIdSwagger()
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Authorize(Roles.SYSTEM_ADMIN)
   async deleteCity(@Param('id') cityId: string): Promise<void> {
     return this.citiesService.deleteCity(cityId);
   }

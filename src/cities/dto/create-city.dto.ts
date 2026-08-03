@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCityDto {
   @ApiProperty({
@@ -15,6 +15,6 @@ export class CreateCityDto {
     example: '123456789012345678901234',
   })
   @IsNotEmpty()
-  @IsMongoId()
+  @IsString()
   cityCode: string;
 }

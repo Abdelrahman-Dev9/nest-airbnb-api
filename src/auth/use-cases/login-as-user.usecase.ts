@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as bcrpty from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { badRequestException } from 'src/common/errors-handling/custom-exceptions/bad-request.exception';
@@ -25,7 +25,7 @@ export class LoginAsUserUseCase {
     //compare password
     const isPasswordMatch = await bcrpty.compare(body.password, user.password);
     if (!isPasswordMatch) {
-      throw new BadRequestException('Invalid credentials');
+      throw new badRequestException('Invalid credentials');
     }
     //generate & return token
     const { accessToken, refreshToken } =
