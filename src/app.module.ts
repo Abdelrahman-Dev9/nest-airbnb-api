@@ -13,6 +13,7 @@ import { CurrenciesModule } from './currencies/currencies.module';
 import { SystemAdminsModule } from './system-admins/system-admins.module';
 import { UnitCategoriesModule } from './unit-categories/unit-categories.module';
 import { UsersModule } from './users/users.module';
+import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UsersModule } from './users/users.module';
     { provide: APP_INTERCEPTOR, useClass: LoggerInterceptor },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_INTERCEPTOR, useClass: TransformResponseInterceptor },
   ],
   exports: [UsersModule, SystemAdminsModule],
 })
